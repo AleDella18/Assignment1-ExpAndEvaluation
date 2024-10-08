@@ -80,6 +80,11 @@ public interface Sorter<T extends Comparable<T>> {
         BubbleSortWhileNeeded<Integer> BSWNIntegers = new BubbleSortWhileNeeded<>();
         QuickSortGPT<Integer> QSGPTIntegers = new QuickSortGPT<>();
         SelectionSortGPT<Integer> SSGPTIntegers = new SelectionSortGPT<>();
+
+        long startTime;
+        long endTime;
+        long totalTime;
+
         for (Integer[] array : arrayListIntegers) {
             // Iterations
             // Print the formatted array
@@ -93,42 +98,42 @@ public interface Sorter<T extends Comparable<T>> {
             System.out.println("}:");
             for (int i = 0; i < iterations; ++i) {
 
-                long startTime1 = System.nanoTime();
+                startTime = System.nanoTime();
                 BSUNCIntegers.sort(array);
-                long endTime1 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime1 = endTime1 - startTime1;
-                arrayIntegers1[i] = totalTime1;
+                totalTime = endTime - startTime;
+                arrayIntegers1[i] = totalTime;
 
-                long startTime2 = System.nanoTime();
+                startTime = System.nanoTime();
                 BSWNIntegers.sort(array);
-                long endTime2 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime2 = endTime2 - startTime2;
-                arrayIntegers2[i] = totalTime2;
+                totalTime = endTime - startTime;
+                arrayIntegers2[i] = totalTime;
 
-                long startTime3 = System.nanoTime();
+                startTime = System.nanoTime();
                 QSGPTIntegers.sort(array);
-                long endTime3 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime3 = endTime3 - startTime3;
-                arrayIntegers3[i] = totalTime3;
+                totalTime = endTime - startTime;
+                arrayIntegers3[i] = totalTime;
 
-                long startTime4 = System.nanoTime();
+                startTime = System.nanoTime();
                 SSGPTIntegers.sort(array);
-                long endTime4 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime4 = endTime4 - startTime4;
-                arrayIntegers4[i] = totalTime4;
+                totalTime = endTime - startTime;
+                arrayIntegers4[i] = totalTime;
 
-                System.out.print("Iteration " + (i + 1) + ": Total time for BSUNC: " + totalTime1);
-                System.out.print(" Total time for BSWN : " + totalTime2);
-                System.out.print(" Total time for QSGPT : " + totalTime3);
-                System.out.println(" Total time for SSGPT : " + totalTime4);
+                System.out.print("Iteration " + (i + 1) + ": Total time for BSUNC: " + arrayIntegers1[i]);
+                System.out.print(" Total time for BSWN : " + arrayIntegers2[i]);
+                System.out.print(" Total time for QSGPT : " + arrayIntegers3[i]);
+                System.out.println(" Total time for SSGPT : " + arrayIntegers4[i]);
             }
 
             Arrays.sort(arrayIntegers1);
@@ -174,42 +179,42 @@ public interface Sorter<T extends Comparable<T>> {
             System.out.println("}:");
             for (int i = 0; i < iterations; ++i) {
 
-                long startTime1 = System.nanoTime();
+                startTime = System.nanoTime();
                 BSUNCStrings.sort(array);
-                long endTime1 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime1 = endTime1 - startTime1;
-                arrayStrings1[i] = totalTime1;
+                totalTime = endTime - startTime;
+                arrayStrings1[i] = totalTime;
 
-                long startTime2 = System.nanoTime();
+                startTime = System.nanoTime();
                 BSWNStrings.sort(array);
-                long endTime2 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime2 = endTime2 - startTime2;
-                arrayStrings2[i] = totalTime2;
+                totalTime = endTime - startTime;
+                arrayStrings2[i] = totalTime;
 
-                long startTime3 = System.nanoTime();
+                startTime = System.nanoTime();
                 QSGPTStrings.sort(array);
-                long endTime3 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime3 = endTime3 - startTime3;
-                arrayStrings3[i] = totalTime3;
+                totalTime = endTime - startTime;
+                arrayStrings3[i] = totalTime;
 
-                long startTime4 = System.nanoTime();
+                startTime = System.nanoTime();
                 SSGPTStrings.sort(array);
-                long endTime4 = System.nanoTime();
+                endTime = System.nanoTime();
 
                 // Calculate the total time taken
-                long totalTime4 = endTime4 - startTime4;
-                arrayStrings4[i] = totalTime4;
+                totalTime = endTime - startTime;
+                arrayStrings4[i] = totalTime;
 
-                System.out.print("Iteration " + (i + 1) + ": Total time for BSUNC: " + totalTime1);
-                System.out.print(" Total time for BSWN : " + totalTime2);
-                System.out.print(" Total time for QSGPT : " + totalTime3);
-                System.out.println(" Total time for SSGPT : " + totalTime4);
+                System.out.print("Iteration " + (i + 1) + ": Total time for BSUNC: " + arrayStrings1[i]);
+                System.out.print(" Total time for BSWN : " + arrayStrings2[i]);
+                System.out.print(" Total time for QSGPT : " + arrayStrings3[i]);
+                System.out.println(" Total time for SSGPT : " + arrayStrings4[i]);
             }
 
             Arrays.sort(arrayStrings1);
