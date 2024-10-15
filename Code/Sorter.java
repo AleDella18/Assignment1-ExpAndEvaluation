@@ -14,34 +14,74 @@ public interface Sorter<T extends Comparable<T>> {
         long countQSGPT = 0;
         long countSSGPT = 0;
 
-        int iterations = 19;
+        int iterations = 41;
+
+        // Assertion for having an array of execution times when we can access directly
+        // minimum, first quartile, median, third quartile, and maximum
+        assert iterations % 4 == 1;
 
         long[] arrayIntegers1 = new long[iterations];
         long[] arrayIntegers2 = new long[iterations];
         long[] arrayIntegers3 = new long[iterations];
         long[] arrayIntegers4 = new long[iterations];
 
-        Integer[] testIntegers1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        Integer[] testIntegers2 = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
-        Integer[] testIntegers3 = {42};
-        Integer[] testIntegers4 = {5, 3};
-        Integer[] testIntegers5 = {2, 7, 4, 0, 6, 1, 9, 3, 5, 8};
-        Integer[] testIntegers6 = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5};
-        Integer[] testIntegers7 = {5, 1, 3, 1, 2, 5, 3, 5, 1, 2};
-        Integer[] testIntegers8 = new Integer[1000]; // Fill with random values or sequential numbers
-        for (int i = 0; i < testIntegers8.length; i++) {
-            testIntegers8[i] = (int)(Math.random() * 1000);
+        int smallSize = 100;
+        int mediumSize = 10000;
+        int largeSize = 12000;
+
+        Integer[] testIntegersSmallArraySorted = new Integer[smallSize];
+        for (int i = 0; i < smallSize; ++i) {
+            testIntegersSmallArraySorted[i] = i;
+        }
+        Integer[] testIntegersSmallArrayReverseSorted = new Integer[smallSize];
+        for (int i = 0; i < smallSize; ++i) {
+            testIntegersSmallArrayReverseSorted[i] = smallSize - 1 - i;
+        }
+        Integer[] testIntegersSmallArrayRandom = new Integer[smallSize];
+        for (int i = 0; i < smallSize; ++i) {
+            testIntegersSmallArrayRandom[i] = (int)(Math.random() * smallSize);
+        }
+
+        Integer[] testIntegersMediumArraySorted = new Integer[mediumSize];
+        for (int i = 0; i < mediumSize; ++i) {
+            testIntegersMediumArraySorted[i] = i;
+        }
+
+        Integer[] testIntegersMediumArrayReverseSorted = new Integer[mediumSize];
+        for (int i = 0; i < mediumSize; ++i) {
+            testIntegersMediumArrayReverseSorted[i] = mediumSize - 1 - i;
+        }
+
+        Integer[] testIntegersMediumArrayRandom = new Integer[mediumSize];
+        for (int i = 0; i < mediumSize; i++) {
+            testIntegersMediumArrayRandom[i] = (int)(Math.random() * mediumSize);
+        }
+
+        Integer[] testIntegersLargeArraySorted = new Integer[largeSize];
+        for (int i = 0; i < largeSize; ++i) {
+            testIntegersLargeArraySorted[i] = i;
+        }
+
+        Integer[] testIntegersLargeArrayReverseSorted = new Integer[largeSize];
+        for (int i = 0; i < largeSize; ++i) {
+            testIntegersLargeArrayReverseSorted[i] = largeSize  - 1 - i;
+        }
+
+        Integer[] testIntegersLargeArrayRandom = new Integer[largeSize];
+        for (int i = 0; i < largeSize; i++) {
+            testIntegersLargeArrayRandom[i] = (int)(Math.random() * largeSize);
         }
 
         List<Integer[]> arrayListIntegers = new ArrayList<>();
-        arrayListIntegers.add(testIntegers1);
-        arrayListIntegers.add(testIntegers2);
-        arrayListIntegers.add(testIntegers3);
-        arrayListIntegers.add(testIntegers4);
-        arrayListIntegers.add(testIntegers5);
-        arrayListIntegers.add(testIntegers6);
-        arrayListIntegers.add(testIntegers7);
-        arrayListIntegers.add(testIntegers8);
+        arrayListIntegers.add(testIntegersSmallArraySorted);
+        arrayListIntegers.add(testIntegersSmallArrayReverseSorted);
+        arrayListIntegers.add(testIntegersSmallArrayRandom);
+        arrayListIntegers.add(testIntegersMediumArraySorted);
+        arrayListIntegers.add(testIntegersMediumArrayReverseSorted);
+        arrayListIntegers.add(testIntegersMediumArrayRandom);
+        arrayListIntegers.add(testIntegersLargeArraySorted);
+        arrayListIntegers.add(testIntegersLargeArrayReverseSorted);
+        arrayListIntegers.add(testIntegersLargeArrayRandom);
 
         long[] arrayStrings1 = new long[iterations];
         long[] arrayStrings2 = new long[iterations];
@@ -154,10 +194,10 @@ public interface Sorter<T extends Comparable<T>> {
             else {
                 ++countSSGPT;
             }
-            System.out.print("Median time for BSUNC : " + arrayIntegers1[iterations/2]);
-            System.out.print(" Median time for BSWN : " + arrayIntegers2[iterations/2]);
-            System.out.print(" Median time for QSGPT : " + arrayIntegers3[iterations/2]);
-            System.out.println(" Median time for SSGPT : " + arrayIntegers4[iterations/2]);
+            System.out.println("Minimum time for BSUNC : " + arrayIntegers1[0] + " First quartile time for BSUNC : " + arrayIntegers1[iterations/4] + " Median time for BSUNC : " + arrayIntegers1[iterations/2] + " Third quartile time for BSUNC : " + arrayIntegers1[3 * iterations / 4] + " Maximum time for BSUNC : " + arrayIntegers1[iterations - 1]);
+            System.out.println("Minimum time for BSWN : " + arrayIntegers2[0] + " First quartile time for BSWN : " + arrayIntegers2[iterations/4] + " Median time for BSWN : " + arrayIntegers2[iterations/2] + " Third quartile time for BSWN : " + arrayIntegers2[3 * iterations / 4] + " Maximum time for BSWN : " + arrayIntegers2[iterations - 1]);
+            System.out.println("Minimum time for QSGPT : " + arrayIntegers3[0] + " First quartile time for QSGPT : " + arrayIntegers3[iterations/4] + " Median time for QSGPT : " + arrayIntegers3[iterations/2] + " Third quartile time for QSGPT : " + arrayIntegers3[3 * iterations / 4] + " Maximum time for QSGPT : " + arrayIntegers3[iterations - 1]);
+            System.out.println("Minimum time for SSGPT : " + arrayIntegers4[0] + " First quartile time for SSGPT : " + arrayIntegers4[iterations/4] + " Median time for SSGPT : " + arrayIntegers4[iterations/2] + " Third quartile time for SSGPT : " + arrayIntegers4[3 * iterations / 4] + " Maximum time for SSGPT : " + arrayIntegers4[iterations - 1]);
             System.out.println();
         }
 
