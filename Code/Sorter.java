@@ -3,9 +3,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public interface Sorter<T extends Comparable<T>> {
 
     void sort(T[] items);
+
+    public static void exportToCSV(long[] times, String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (long time : times) {
+                writer.write(time + ",");
+            }
+            writer.write("\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     static void main(String[] args) {
 
@@ -76,12 +90,12 @@ public interface Sorter<T extends Comparable<T>> {
         arrayListIntegers.add(testIntegersSmallArraySorted);
         arrayListIntegers.add(testIntegersSmallArrayReverseSorted);
         arrayListIntegers.add(testIntegersSmallArrayRandom);
-        arrayListIntegers.add(testIntegersMediumArraySorted);
+        /*arrayListIntegers.add(testIntegersMediumArraySorted);
         arrayListIntegers.add(testIntegersMediumArrayReverseSorted);
         arrayListIntegers.add(testIntegersMediumArrayRandom);
         arrayListIntegers.add(testIntegersLargeArraySorted);
         arrayListIntegers.add(testIntegersLargeArrayReverseSorted);
-        arrayListIntegers.add(testIntegersLargeArrayRandom);
+        arrayListIntegers.add(testIntegersLargeArrayRandom);*/
 
         long[] arrayStrings1 = new long[iterations];
         long[] arrayStrings2 = new long[iterations];
@@ -200,6 +214,12 @@ public interface Sorter<T extends Comparable<T>> {
             System.out.println("Minimum time for SSGPT : " + arrayIntegers4[0] + " First quartile time for SSGPT : " + arrayIntegers4[iterations/4] + " Median time for SSGPT : " + arrayIntegers4[iterations/2] + " Third quartile time for SSGPT : " + arrayIntegers4[3 * iterations / 4] + " Maximum time for SSGPT : " + arrayIntegers4[iterations - 1]);
             System.out.println();
         }
+
+        // After measuring times, export them to CSV
+        exportToCSV(arrayIntegers1, "BubbleSortUntilNoChange_Times.csv");
+        exportToCSV(arrayIntegers2, "BubbleSortWhileNeeded_Times.csv");
+        exportToCSV(arrayIntegers3, "QuickSortGPT_Times.csv");
+        exportToCSV(arrayIntegers4, "SelectionSortGPT_Times.csv");
 
         BubbleSortUntilNoChange<String> BSUNCStrings = new BubbleSortUntilNoChange<>();
         BubbleSortWhileNeeded<String> BSWNStrings = new BubbleSortWhileNeeded<>();
