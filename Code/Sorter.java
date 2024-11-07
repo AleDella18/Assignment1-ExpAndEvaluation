@@ -1,8 +1,5 @@
 package Code;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.io.*;
+import java.util.*;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -20,90 +17,76 @@ public interface Sorter<T extends Comparable<T>> {
         }
     }
 
+    /*
+    Main function for running the experiment
+     */
     static void main(String[] args) {
 
+        // Number of iterations
         int iterations = 41;
 
-        long[] executionTimesSmallArrays1 = new long[iterations];
-        long[] executionTimesSmallArrays2 = new long[iterations];
-        long[] executionTimesSmallArrays3 = new long[iterations];
-        long[] executionTimesSmallArrays4 = new long[iterations];
+        // Arrays of execution times for the Integer tests
+        long[] executionTimesBSUNC = new long[iterations];
+        long[] executionTimesBSWN = new long[iterations];
+        long[] executionTimesQSGPT = new long[iterations];
+        long[] executionTimesSSGPT = new long[iterations];
 
-        long[] executionTimesMediumArrays1 = new long[iterations];
-        long[] executionTimesMediumArrays2 = new long[iterations];
-        long[] executionTimesMediumArrays3 = new long[iterations];
-        long[] executionTimesMediumArrays4 = new long[iterations];
-
-        long[] executionTimesLargeArrays1 = new long[iterations];
-        long[] executionTimesLargeArrays2 = new long[iterations];
-        long[] executionTimesLargeArrays3 = new long[iterations];
-        long[] executionTimesLargeArrays4 = new long[iterations];
-
+        // Sizes
         int smallSize = 100;
         int mediumSize = 10000;
         int largeSize = 12000;
+        Integer[] integerSizes = {smallSize, mediumSize, largeSize};
 
-        Integer[] testIntegersSmallArraySorted = new Integer[smallSize];
-        for (int i = 0; i < smallSize; ++i) {
-            testIntegersSmallArraySorted[i] = i;
+        // Creation of the list of tests for type Integer
+        List<Integer[]> integerTests = new ArrayList<>();
+        for (int size : integerSizes) {
+            Integer[] testSorted = new Integer[size];
+            // Test sorted
+            for (int i = 0; i < size; ++i) {
+                testSorted[i] = i;
+            }
+            integerTests.add(testSorted);
+            Integer[] testReverseSorted = new Integer[size];
+            for (int i = 0; i < size; ++i) {
+                testReverseSorted[i] = size - 1 - i;
+            }
+            integerTests.add(testReverseSorted);
+            Integer[] testRandomOrder = new Integer[size];
+            for (int i = 0; i < size; ++i) {
+                testRandomOrder[i] = (int) (Math.random() * size);
+            }
+            integerTests.add(testRandomOrder);
         }
 
-        Integer[] testIntegersSmallArrayReverseSorted = new Integer[smallSize];
-        for (int i = 0; i < smallSize; ++i) {
-            testIntegersSmallArrayReverseSorted[i] = smallSize - 1 - i;
-        }
 
-        Integer[] testIntegersSmallArrayRandom = new Integer[smallSize];
-        for (int i = 0; i < smallSize; ++i) {
-            testIntegersSmallArrayRandom[i] = (int)(Math.random() * smallSize);
-        }
+        // Creation of the tests for type String
+        String filePath1 = "/home/stipe/Experimentation & Evaluation/Assignment1-ExpAndEvaluation/words_directory/words_100.txt";
+        String[] testStringsSmallArray = ReadWordsToArray.function(filePath1);
+        String filePath2 = "/home/stipe/Experimentation & Evaluation/Assignment1-ExpAndEvaluation/words_directory/words_10000.txt";
+        String[] testStringsMediumArray = ReadWordsToArray.function(filePath2);
+        //String filePath3 = "/home/stipe/Experimentation & Evaluation/Assignment1-ExpAndEvaluation/words_directory/words_100000.txt";
+        //String[] testStringsLargeArray = ReadWordsToArray.function(filePath3);
 
-        List<Integer[]> arrayListIntegerSmallArraysTests = new ArrayList<>();
-        arrayListIntegerSmallArraysTests.add(testIntegersSmallArraySorted);
-        arrayListIntegerSmallArraysTests.add(testIntegersSmallArrayReverseSorted);
-        arrayListIntegerSmallArraysTests.add(testIntegersSmallArrayRandom);
+        List<String[]> stringTests = new ArrayList<>();
+        stringTests.add(testStringsSmallArray); // First add the random ordered
+        Arrays.sort(testStringsSmallArray);
+        stringTests.add(testStringsSmallArray); // Add the sorted one
+        Arrays.sort(testStringsSmallArray, Collections.reverseOrder());
+        stringTests.add(testStringsSmallArray); // Add the reverse sorted one
 
-        Integer[] testIntegersMediumArraySorted = new Integer[mediumSize];
-        for (int i = 0; i < mediumSize; ++i) {
-            testIntegersMediumArraySorted[i] = i;
-        }
+        stringTests.add(testStringsMediumArray);
+        Arrays.sort(testStringsMediumArray);
+        stringTests.add(testStringsMediumArray);
+        Arrays.sort(testStringsMediumArray, Collections.reverseOrder());
+        stringTests.add(testStringsMediumArray);
 
-        Integer[] testIntegersMediumArrayReverseSorted = new Integer[mediumSize];
-        for (int i = 0; i < mediumSize; ++i) {
-            testIntegersMediumArrayReverseSorted[i] = mediumSize - 1 - i;
-        }
+        /*stringTests.add(testStringsLargeArray);
+        Arrays.sort(testStringsLargeArray);
+        stringTests.add(testStringsLargeArray);
+        Arrays.sort(testStringsLargeArray, Collections.reverseOrder());
+        stringTests.add(testStringsLargeArray);*/
 
-        Integer[] testIntegersMediumArrayRandom = new Integer[mediumSize];
-        for (int i = 0; i < mediumSize; i++) {
-            testIntegersMediumArrayRandom[i] = (int)(Math.random() * mediumSize);
-        }
-
-        List<Integer[]> arrayListIntegerMediumArraysTests = new ArrayList<>();
-        arrayListIntegerMediumArraysTests.add(testIntegersMediumArraySorted);
-        arrayListIntegerMediumArraysTests.add(testIntegersMediumArrayReverseSorted);
-        arrayListIntegerMediumArraysTests.add(testIntegersMediumArrayRandom);
-
-        Integer[] testIntegersLargeArraySorted = new Integer[largeSize];
-        for (int i = 0; i < largeSize; ++i) {
-            testIntegersLargeArraySorted[i] = i;
-        }
-
-        Integer[] testIntegersLargeArrayReverseSorted = new Integer[largeSize];
-        for (int i = 0; i < largeSize; ++i) {
-            testIntegersLargeArrayReverseSorted[i] = largeSize  - 1 - i;
-        }
-
-        Integer[] testIntegersLargeArrayRandom = new Integer[largeSize];
-        for (int i = 0; i < largeSize; i++) {
-            testIntegersLargeArrayRandom[i] = (int)(Math.random() * largeSize);
-        }
-
-        List<Integer[]> arrayListIntegerLargeArraysTests = new ArrayList<>();
-        arrayListIntegerLargeArraysTests.add(testIntegersLargeArraySorted);
-        arrayListIntegerLargeArraysTests.add(testIntegersLargeArrayReverseSorted);
-        arrayListIntegerLargeArraysTests.add(testIntegersLargeArrayRandom);
-
-        // Instances of the 4 algorithms
+        // Instances of the 4 algorithms for integers
         BubbleSortUntilNoChange<Integer> BSUNCIntegers = new BubbleSortUntilNoChange<>();
         BubbleSortWhileNeeded<Integer> BSWNIntegers = new BubbleSortWhileNeeded<>();
         QuickSortGPT<Integer> QSGPTIntegers = new QuickSortGPT<>();
@@ -113,7 +96,8 @@ public interface Sorter<T extends Comparable<T>> {
         long endTime;
         long totalTime;
 
-        for (Integer[] array : arrayListIntegerSmallArraysTests) {
+        int k = 0;
+        for (Integer[] array : integerTests) {
             for (int i = 0; i < iterations; ++i) {
 
                 startTime = System.nanoTime();
@@ -122,7 +106,7 @@ public interface Sorter<T extends Comparable<T>> {
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesSmallArrays1[i] = totalTime;
+                executionTimesBSUNC[i] = totalTime;
 
                 startTime = System.nanoTime();
                 BSWNIntegers.sort(array);
@@ -130,7 +114,7 @@ public interface Sorter<T extends Comparable<T>> {
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesSmallArrays2[i] = totalTime;
+                executionTimesBSWN[i] = totalTime;
 
                 startTime = System.nanoTime();
                 QSGPTIntegers.sort(array);
@@ -138,7 +122,7 @@ public interface Sorter<T extends Comparable<T>> {
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesSmallArrays3[i] = totalTime;
+                executionTimesQSGPT[i] = totalTime;
 
                 startTime = System.nanoTime();
                 SSGPTIntegers.sort(array);
@@ -146,113 +130,77 @@ public interface Sorter<T extends Comparable<T>> {
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesSmallArrays4[i] = totalTime;
+                executionTimesSSGPT[i] = totalTime;
             }
 
-            Arrays.sort(executionTimesSmallArrays1);
-            Arrays.sort(executionTimesSmallArrays2);
-            Arrays.sort(executionTimesSmallArrays3);
-            Arrays.sort(executionTimesSmallArrays4);
+            Arrays.sort(executionTimesBSUNC);
+            Arrays.sort(executionTimesBSWN);
+            Arrays.sort(executionTimesQSGPT);
+            Arrays.sort(executionTimesSSGPT);
+
+            exportToCSV(executionTimesBSUNC, "BubbleSortUntilNoChange_Integer: " + k + ".csv");
+            exportToCSV(executionTimesBSWN, "BubbleSortWhileNeeded_Integer: " + k + ".csv");
+            exportToCSV(executionTimesQSGPT, "QuickSortGPT_Integer: " + k + ".csv");
+            exportToCSV(executionTimesSSGPT, "SelectionSortGPT_Integer: " + k + ".csv");
+
+            ++k;
         }
 
-        exportToCSV(executionTimesSmallArrays1, "BubbleSortUntilNoChange_Integer_SmallArray_Times.csv");
-        exportToCSV(executionTimesSmallArrays2, "BubbleSortWhileNeeded_Integer_SmallArray_Times.csv");
-        exportToCSV(executionTimesSmallArrays3, "QuickSortGPT_Integer_SmallArray_Times.csv");
-        exportToCSV(executionTimesSmallArrays4, "SelectionSortGPT_Integer_SmallArray_Times.csv");
 
-        for (Integer[] array : arrayListIntegerMediumArraysTests) {
+        // Instances of the 4 algorithms for Strings
+        BubbleSortUntilNoChange<String> BSUNCStrings = new BubbleSortUntilNoChange<>();
+        BubbleSortWhileNeeded<String> BSWNStrings = new BubbleSortWhileNeeded<>();
+        QuickSortGPT<String> QSGPTStrings = new QuickSortGPT<>();
+        SelectionSortGPT<String> SSGPTStrings = new SelectionSortGPT<>();
+
+        k = 0;
+        for (String[] array : stringTests) {
             for (int i = 0; i < iterations; ++i) {
 
                 startTime = System.nanoTime();
-                BSUNCIntegers.sort(array);
+                BSUNCStrings.sort(array);
                 endTime = System.nanoTime();
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesMediumArrays1[i] = totalTime;
+                executionTimesBSUNC[i] = totalTime;
 
                 startTime = System.nanoTime();
-                BSWNIntegers.sort(array);
+                BSWNStrings.sort(array);
                 endTime = System.nanoTime();
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesMediumArrays2[i] = totalTime;
+                executionTimesBSWN[i] = totalTime;
 
                 startTime = System.nanoTime();
-                QSGPTIntegers.sort(array);
+                QSGPTStrings.sort(array);
                 endTime = System.nanoTime();
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesMediumArrays3[i] = totalTime;
+                executionTimesQSGPT[i] = totalTime;
 
                 startTime = System.nanoTime();
-                SSGPTIntegers.sort(array);
+                SSGPTStrings.sort(array);
                 endTime = System.nanoTime();
 
                 // Calculate the total time taken
                 totalTime = endTime - startTime;
-                executionTimesMediumArrays4[i] = totalTime;
+                executionTimesSSGPT[i] = totalTime;
             }
 
-            Arrays.sort(executionTimesMediumArrays1);
-            Arrays.sort(executionTimesMediumArrays2);
-            Arrays.sort(executionTimesMediumArrays3);
-            Arrays.sort(executionTimesMediumArrays4);
+            Arrays.sort(executionTimesBSUNC);
+            Arrays.sort(executionTimesBSWN);
+            Arrays.sort(executionTimesQSGPT);
+            Arrays.sort(executionTimesSSGPT);
+
+            exportToCSV(executionTimesBSUNC, "BubbleSortUntilNoChange_String: " + k + ".csv");
+            exportToCSV(executionTimesBSWN, "BubbleSortWhileNeeded_String: " + k + ".csv");
+            exportToCSV(executionTimesQSGPT, "QuickSortGPT_String: " + k + ".csv");
+            exportToCSV(executionTimesSSGPT, "SelectionSortGPT_String: " + k + ".csv");
+
+            ++k;
         }
-
-        exportToCSV(executionTimesMediumArrays1, "BubbleSortUntilNoChange_Integer_MediumArray_Times.csv");
-        exportToCSV(executionTimesMediumArrays2, "BubbleSortWhileNeeded_Integer_MediumArray_Times.csv");
-        exportToCSV(executionTimesMediumArrays3, "QuickSortGPT_Integer_MediumArray_Times.csv");
-        exportToCSV(executionTimesMediumArrays4, "SelectionSortGPT_Integer_MediumArray_Times.csv");
-
-        for (Integer[] array : arrayListIntegerLargeArraysTests) {
-            for (int i = 0; i < iterations; ++i) {
-
-                startTime = System.nanoTime();
-                BSUNCIntegers.sort(array);
-                endTime = System.nanoTime();
-
-                // Calculate the total time taken
-                totalTime = endTime - startTime;
-                executionTimesLargeArrays1[i] = totalTime;
-
-                startTime = System.nanoTime();
-                BSWNIntegers.sort(array);
-                endTime = System.nanoTime();
-
-                // Calculate the total time taken
-                totalTime = endTime - startTime;
-                executionTimesLargeArrays2[i] = totalTime;
-
-                startTime = System.nanoTime();
-                QSGPTIntegers.sort(array);
-                endTime = System.nanoTime();
-
-                // Calculate the total time taken
-                totalTime = endTime - startTime;
-                executionTimesLargeArrays3[i] = totalTime;
-
-                startTime = System.nanoTime();
-                SSGPTIntegers.sort(array);
-                endTime = System.nanoTime();
-
-                // Calculate the total time taken
-                totalTime = endTime - startTime;
-                executionTimesLargeArrays4[i] = totalTime;
-            }
-
-            Arrays.sort(executionTimesLargeArrays1);
-            Arrays.sort(executionTimesLargeArrays2);
-            Arrays.sort(executionTimesLargeArrays3);
-            Arrays.sort(executionTimesLargeArrays4);
-        }
-
-        exportToCSV(executionTimesLargeArrays1, "BubbleSortUntilNoChange_Integer_LargeArray_Times.csv");
-        exportToCSV(executionTimesLargeArrays2, "BubbleSortWhileNeeded_Integer_LargeArray_Times.csv");
-        exportToCSV(executionTimesLargeArrays3, "QuickSortGPT_Integer_LargeArray_Times.csv");
-        exportToCSV(executionTimesLargeArrays4, "SelectionSortGPT_Integer_LargeArray_Times.csv");
-
     }
 }
