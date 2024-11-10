@@ -70,13 +70,11 @@ public interface Sorter<T extends Comparable<T>> {
         String filePath1 = System.getProperty("user.dir") + "/words_directory/words_100.txt";
         String[] testStringsSmallArray = ReadWordsToArray.function(filePath1);
 
-        String filePath2 = System.getProperty("user.dir") + "/words_directory/words_10000.txt";
+        String filePath2 = System.getProperty("user.dir") + "/words_directory/words_1000.txt";
         String[] testStringsMediumArray = ReadWordsToArray.function(filePath2);
 
-        String filePath3 = System.getProperty("user.dir") + "/words_directory/words_100000.txt";
+        String filePath3 = System.getProperty("user.dir") + "/words_directory/words_10000.txt";
         String[] testStringsLargeArray = ReadWordsToArray.function(filePath3);
-
-        String[] new_testStringsLargeArray = Arrays.copyOfRange(testStringsLargeArray, 0, 10000);
 
         List<String[]> stringTests = new ArrayList<>();
 
@@ -108,15 +106,15 @@ public interface Sorter<T extends Comparable<T>> {
 
         // For large size arrays
 
-        String[] largeSortedOrder = Arrays.copyOf(new_testStringsLargeArray, new_testStringsLargeArray.length);
+        String[] largeSortedOrder = Arrays.copyOf(testStringsLargeArray, testStringsLargeArray.length);
         Arrays.sort(largeSortedOrder);
         stringTests.add(largeSortedOrder); // Test 6: Large size / Already sorted
 
-        String[] largeReverseSortedOrder = Arrays.copyOf(new_testStringsLargeArray, new_testStringsLargeArray.length);
+        String[] largeReverseSortedOrder = Arrays.copyOf(testStringsLargeArray, testStringsLargeArray.length);
         Arrays.sort(largeReverseSortedOrder, Collections.reverseOrder());
         stringTests.add(largeReverseSortedOrder); // Test 7: Large size / Reverse sorted
 
-        String[] largeRandomOrder = Arrays.copyOf(new_testStringsLargeArray, new_testStringsLargeArray.length);
+        String[] largeRandomOrder = Arrays.copyOf(testStringsLargeArray, testStringsLargeArray.length);
         stringTests.add(largeRandomOrder); // Test 8: Large size / Random ordered
 
 
