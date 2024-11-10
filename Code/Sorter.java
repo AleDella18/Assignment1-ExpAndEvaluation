@@ -23,8 +23,8 @@ public interface Sorter<T extends Comparable<T>> {
     static void main(String[] args) {
 
         // Number of iterations, iterations % 4 == 1
-        int iterations = 60;
-        int warmUps = 10;
+        int iterations = 80;
+        int warmUps = 30;
         int relevantIterations = iterations - warmUps;
 
         // Arrays of execution times for the tests
@@ -35,8 +35,8 @@ public interface Sorter<T extends Comparable<T>> {
 
         // Sizes
         int smallSize = 100;
-        int mediumSize = 10000;
-        int largeSize = 12000;
+        int mediumSize = 1000;
+        int largeSize = 10000;
         Integer[] integerSizes = {smallSize, mediumSize, largeSize};
 
         // Creation of the list of tests for type Integer
@@ -76,45 +76,49 @@ public interface Sorter<T extends Comparable<T>> {
         String filePath3 = System.getProperty("user.dir") + "/words_directory/words_100000.txt";
         String[] testStringsLargeArray = ReadWordsToArray.function(filePath3);
 
-        String[] new_testStringsLargeArray = Arrays.copyOfRange(testStringsLargeArray, 0, 11000);
+        String[] new_testStringsLargeArray = Arrays.copyOfRange(testStringsLargeArray, 0, 10000);
 
         List<String[]> stringTests = new ArrayList<>();
 
         // For small size arrays
-        String[] smallRandomOrder = Arrays.copyOf(testStringsSmallArray, testStringsSmallArray.length);
-        stringTests.add(smallRandomOrder); // Test 0: Small size / Random ordered
 
         String[] smallSortedOrder = Arrays.copyOf(testStringsSmallArray, testStringsSmallArray.length);
         Arrays.sort(smallSortedOrder);
-        stringTests.add(smallSortedOrder); // Test 1: Small size / Already sorted
+        stringTests.add(smallSortedOrder); // Test 0: Small size / Already sorted
 
         String[] smallReverseSortedOrder = Arrays.copyOf(testStringsSmallArray, testStringsSmallArray.length);
         Arrays.sort(smallReverseSortedOrder, Collections.reverseOrder());
-        stringTests.add(smallReverseSortedOrder); // Test 2: Small size / Reverse sorted
+        stringTests.add(smallReverseSortedOrder); // Test 1: Small size / Reverse sorted
+
+        String[] smallRandomOrder = Arrays.copyOf(testStringsSmallArray, testStringsSmallArray.length);
+        stringTests.add(smallRandomOrder); // Test 2: Small size / Random ordered
 
         // For medium size arrays
-        String[] mediumRandomOrder = Arrays.copyOf(testStringsMediumArray, testStringsMediumArray.length);
-        stringTests.add(mediumRandomOrder); // Test 3: Medium size / Random ordered
 
         String[] mediumSortedOrder = Arrays.copyOf(testStringsMediumArray, testStringsMediumArray.length);
         Arrays.sort(mediumSortedOrder);
-        stringTests.add(mediumSortedOrder); // Test 4: Medium size / Already sorted
+        stringTests.add(mediumSortedOrder); // Test 3: Medium size / Already sorted
 
         String[] mediumReverseSortedOrder = Arrays.copyOf(testStringsMediumArray, testStringsMediumArray.length);
         Arrays.sort(mediumReverseSortedOrder, Collections.reverseOrder());
-        stringTests.add(mediumReverseSortedOrder); // Test 5: Medium size / Reverse sorted
+        stringTests.add(mediumReverseSortedOrder); // Test 4: Medium size / Reverse sorted
+
+        String[] mediumRandomOrder = Arrays.copyOf(testStringsMediumArray, testStringsMediumArray.length);
+        stringTests.add(mediumRandomOrder); // Test 5: Medium size / Random ordered
 
         // For large size arrays
-        String[] largeRandomOrder = Arrays.copyOf(new_testStringsLargeArray, new_testStringsLargeArray.length);
-        stringTests.add(largeRandomOrder); // Test 6: Large size / Random ordered
 
         String[] largeSortedOrder = Arrays.copyOf(new_testStringsLargeArray, new_testStringsLargeArray.length);
         Arrays.sort(largeSortedOrder);
-        stringTests.add(largeSortedOrder); // Test 7: Large size / Already sorted
+        stringTests.add(largeSortedOrder); // Test 6: Large size / Already sorted
 
         String[] largeReverseSortedOrder = Arrays.copyOf(new_testStringsLargeArray, new_testStringsLargeArray.length);
         Arrays.sort(largeReverseSortedOrder, Collections.reverseOrder());
-        stringTests.add(largeReverseSortedOrder); // Test 8: Large size / Reverse sorted
+        stringTests.add(largeReverseSortedOrder); // Test 7: Large size / Reverse sorted
+
+        String[] largeRandomOrder = Arrays.copyOf(new_testStringsLargeArray, new_testStringsLargeArray.length);
+        stringTests.add(largeRandomOrder); // Test 8: Large size / Random ordered
+
 
         // Instances of the 4 algorithms for integers
         BubbleSortUntilNoChange<Integer> BSUNCIntegers = new BubbleSortUntilNoChange<>();
