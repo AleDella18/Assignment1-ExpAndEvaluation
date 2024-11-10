@@ -14,29 +14,10 @@ public final class BubbleSortWhileNeeded<T extends Comparable<T>> implements Sor
                     items[i] = item;
                     maxIndex = i;
                 }
-                /*System.out.print("Iteration: " + i + ", maxIndex = " + maxIndex);
-                System.out.print(" Resulting array {");
-                for (int j = 0; j < items.length; j++) {
-                    System.out.print(items[j]);
-                    if (j < items.length - 1) {
-                        System.out.print(", ");
-                    }
-                }
-                System.out.println("}");*/
             }
             n = maxIndex;
-            // System.out.println("n = " + n);
         } while (n > 0);
 
     }
-    /*public static void main(String[] args) {
-        Integer[] A = {0, 1, -1, 2};
-        Integer[] B = {2, 1, 0, -1};
-
-        BubbleSortWhileNeeded<Integer> b = new BubbleSortWhileNeeded<>();
-        b.sort(A);
-        System.out.println();
-        b.sort(B);
-    }*/
 
 }
