@@ -22,8 +22,10 @@ public interface Sorter<T extends Comparable<T>> {
      */
     static void main(String[] args) {
 
-        // Number of iterations
-        int iterations = 41;
+        // Number of iterations, iterations % 4 == 1
+        int iterations = 63;
+        int warmUps = 10;
+        int relevantIterations = iterations - warmUps;
 
         // Arrays of execution times for the Integer tests
         long[] executionTimesBSUNC = new long[iterations];
@@ -64,27 +66,28 @@ public interface Sorter<T extends Comparable<T>> {
         String[] testStringsSmallArray = ReadWordsToArray.function(filePath1);
         String filePath2 = "/home/stipe/Experimentation & Evaluation/Assignment1-ExpAndEvaluation/words_directory/words_10000.txt";
         String[] testStringsMediumArray = ReadWordsToArray.function(filePath2);
-        //String filePath3 = "/home/stipe/Experimentation & Evaluation/Assignment1-ExpAndEvaluation/words_directory/words_100000.txt";
-        //String[] testStringsLargeArray = ReadWordsToArray.function(filePath3);
+        String filePath3 = "/home/stipe/Experimentation & Evaluation/Assignment1-ExpAndEvaluation/words_directory/words_100000.txt";
+        String[] testStringsLargeArray = ReadWordsToArray.function(filePath3);
+        String[] new_testStringsLargeArray = Arrays.copyOfRange(testStringsLargeArray, 0, 11000);
 
         List<String[]> stringTests = new ArrayList<>();
-        stringTests.add(testStringsSmallArray); // First add the random ordered
-        Arrays.sort(testStringsSmallArray);
-        stringTests.add(testStringsSmallArray); // Add the sorted one
-        Arrays.sort(testStringsSmallArray, Collections.reverseOrder());
-        stringTests.add(testStringsSmallArray); // Add the reverse sorted one
+        stringTests.add(testStringsSmallArray);                             // Test 0: Small size / Random ordered
+        Arrays.sort(testStringsSmallArray);                                 //
+        stringTests.add(testStringsSmallArray);                             // Test 1: Small size / Already sorted
+        Arrays.sort(testStringsSmallArray, Collections.reverseOrder());     //
+        stringTests.add(testStringsSmallArray);                             // Test 2: Small size / Reverse sorted
 
-        stringTests.add(testStringsMediumArray);
-        Arrays.sort(testStringsMediumArray);
-        stringTests.add(testStringsMediumArray);
-        Arrays.sort(testStringsMediumArray, Collections.reverseOrder());
-        stringTests.add(testStringsMediumArray);
+        stringTests.add(testStringsMediumArray);                            // Test 3: Medium size / Random ordered
+        Arrays.sort(testStringsMediumArray);                                //
+        stringTests.add(testStringsMediumArray);                            // Test 4: Medium size / Already sorted
+        Arrays.sort(testStringsMediumArray, Collections.reverseOrder());    //
+        stringTests.add(testStringsMediumArray);                            // Test 5: Medium size / Reverse sorted
 
-        /*stringTests.add(testStringsLargeArray);
-        Arrays.sort(testStringsLargeArray);
-        stringTests.add(testStringsLargeArray);
-        Arrays.sort(testStringsLargeArray, Collections.reverseOrder());
-        stringTests.add(testStringsLargeArray);*/
+        stringTests.add(new_testStringsLargeArray);                         // Test 6: Large size / Random ordered
+        Arrays.sort(new_testStringsLargeArray);                             //
+        stringTests.add(new_testStringsLargeArray);                         // Test 7: Large size / Already sorted
+        Arrays.sort(new_testStringsLargeArray, Collections.reverseOrder()); //
+        stringTests.add(new_testStringsLargeArray);                         // Test 8: Large size / Reverse sorted
 
         // Instances of the 4 algorithms for integers
         BubbleSortUntilNoChange<Integer> BSUNCIntegers = new BubbleSortUntilNoChange<>();
@@ -98,6 +101,14 @@ public interface Sorter<T extends Comparable<T>> {
 
         int k = 0;
         for (Integer[] array : integerTests) {
+            System.out.print("Analysis for the array {");
+            for (int i = 0; i < array.length; i++) {
+                System.out.print(array[i]);
+                if (i < array.length - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println("}:");
             for (int i = 0; i < iterations; ++i) {
 
                 startTime = System.nanoTime();
@@ -133,17 +144,28 @@ public interface Sorter<T extends Comparable<T>> {
                 executionTimesSSGPT[i] = totalTime;
             }
 
-            Arrays.sort(executionTimesBSUNC);
-            Arrays.sort(executionTimesBSWN);
-            Arrays.sort(executionTimesQSGPT);
-            Arrays.sort(executionTimesSSGPT);
+            long[] new_executionTimesBSUNC = Arrays.copyOfRange(executionTimesBSUNC, 10, executionTimesBSUNC.length);
+            long[] new_executionTimesBSWN = Arrays.copyOfRange(executionTimesBSWN, 10, executionTimesBSWN.length);
+            long[] new_executionTimesQSGPT = Arrays.copyOfRange(executionTimesQSGPT, 10, executionTimesQSGPT.length);
+            long[] new_executionTimesSSGPT = Arrays.copyOfRange(executionTimesSSGPT, 10, executionTimesSSGPT.length);
 
-            exportToCSV(executionTimesBSUNC, "BubbleSortUntilNoChange_Integer: " + k + ".csv");
-            exportToCSV(executionTimesBSWN, "BubbleSortWhileNeeded_Integer: " + k + ".csv");
-            exportToCSV(executionTimesQSGPT, "QuickSortGPT_Integer: " + k + ".csv");
-            exportToCSV(executionTimesSSGPT, "SelectionSortGPT_Integer: " + k + ".csv");
+            Arrays.sort(new_executionTimesBSUNC);
+            Arrays.sort(new_executionTimesBSWN);
+            Arrays.sort(new_executionTimesQSGPT);
+            Arrays.sort(new_executionTimesSSGPT);
+
+            exportToCSV(new_executionTimesBSUNC, "BubbleSortUntilNoChange_Integer: " + k + ".csv");
+            exportToCSV(new_executionTimesBSWN, "BubbleSortWhileNeeded_Integer: " + k + ".csv");
+            exportToCSV(new_executionTimesQSGPT, "QuickSortGPT_Integer: " + k + ".csv");
+            exportToCSV(new_executionTimesSSGPT, "SelectionSortGPT_Integer: " + k + ".csv");
 
             ++k;
+
+            System.out.println("Minimum time for BSUNC : " + new_executionTimesBSUNC[0] + " First quartile time for BSUNC : " + new_executionTimesBSUNC[relevantIterations/4] + " Median time for BSUNC : " + new_executionTimesBSUNC[relevantIterations/2] + " Third quartile time for BSUNC : " + new_executionTimesBSUNC[3 * relevantIterations / 4] + " Maximum time for BSUNC : " + new_executionTimesBSUNC[relevantIterations - 1]);
+            System.out.println("Minimum time for BSWN : " + new_executionTimesBSWN[0] + " First quartile time for BSWN : " + new_executionTimesBSWN[relevantIterations/4] + " Median time for BSWN : " + new_executionTimesBSWN[relevantIterations/2] + " Third quartile time for BSWN : " + new_executionTimesBSWN[3 * relevantIterations / 4] + " Maximum time for BSWN : " + new_executionTimesBSWN[relevantIterations - 1]);
+            System.out.println("Minimum time for QSGPT : " + new_executionTimesQSGPT[0] + " First quartile time for QSGPT : " + new_executionTimesQSGPT[relevantIterations/4] + " Median time for QSGPT : " + new_executionTimesQSGPT[relevantIterations/2] + " Third quartile time for QSGPT : " + new_executionTimesQSGPT[3 * relevantIterations / 4] + " Maximum time for QSGPT : " + new_executionTimesQSGPT[relevantIterations - 1]);
+            System.out.println("Minimum time for SSGPT : " + new_executionTimesSSGPT[0] + " First quartile time for SSGPT : " + new_executionTimesSSGPT[relevantIterations/4] + " Median time for SSGPT : " + new_executionTimesSSGPT[relevantIterations/2] + " Third quartile time for SSGPT : " + new_executionTimesSSGPT[3 * relevantIterations / 4] + " Maximum time for SSGPT : " + new_executionTimesSSGPT[relevantIterations - 1]);
+            System.out.println();
         }
 
 
@@ -155,6 +177,7 @@ public interface Sorter<T extends Comparable<T>> {
 
         k = 0;
         for (String[] array : stringTests) {
+            System.out.println("Analysis for String Test " + k + ":");
             for (int i = 0; i < iterations; ++i) {
 
                 startTime = System.nanoTime();
@@ -190,17 +213,28 @@ public interface Sorter<T extends Comparable<T>> {
                 executionTimesSSGPT[i] = totalTime;
             }
 
-            Arrays.sort(executionTimesBSUNC);
-            Arrays.sort(executionTimesBSWN);
-            Arrays.sort(executionTimesQSGPT);
-            Arrays.sort(executionTimesSSGPT);
+            long[] new_executionTimesBSUNC = Arrays.copyOfRange(executionTimesBSUNC, 10, executionTimesBSUNC.length);
+            long[] new_executionTimesBSWN = Arrays.copyOfRange(executionTimesBSWN, 10, executionTimesBSWN.length);
+            long[] new_executionTimesQSGPT = Arrays.copyOfRange(executionTimesQSGPT, 10, executionTimesQSGPT.length);
+            long[] new_executionTimesSSGPT = Arrays.copyOfRange(executionTimesSSGPT, 10, executionTimesSSGPT.length);
 
-            exportToCSV(executionTimesBSUNC, "BubbleSortUntilNoChange_String: " + k + ".csv");
-            exportToCSV(executionTimesBSWN, "BubbleSortWhileNeeded_String: " + k + ".csv");
-            exportToCSV(executionTimesQSGPT, "QuickSortGPT_String: " + k + ".csv");
-            exportToCSV(executionTimesSSGPT, "SelectionSortGPT_String: " + k + ".csv");
+            Arrays.sort(new_executionTimesBSUNC);
+            Arrays.sort(new_executionTimesBSWN);
+            Arrays.sort(new_executionTimesQSGPT);
+            Arrays.sort(new_executionTimesSSGPT);
+
+            exportToCSV(new_executionTimesBSUNC, "BubbleSortUntilNoChange_String: " + k + ".csv");
+            exportToCSV(new_executionTimesBSWN, "BubbleSortWhileNeeded_String: " + k + ".csv");
+            exportToCSV(new_executionTimesQSGPT, "QuickSortGPT_String: " + k + ".csv");
+            exportToCSV(new_executionTimesSSGPT, "SelectionSortGPT_String: " + k + ".csv");
 
             ++k;
+
+            System.out.println("Minimum time for BSUNC : " + new_executionTimesBSUNC[0] + " First quartile time for BSUNC : " + new_executionTimesBSUNC[relevantIterations/4] + " Median time for BSUNC : " + new_executionTimesBSUNC[relevantIterations/2] + " Third quartile time for BSUNC : " + new_executionTimesBSUNC[3 * relevantIterations / 4] + " Maximum time for BSUNC : " + new_executionTimesBSUNC[relevantIterations - 1]);
+            System.out.println("Minimum time for BSWN : " + new_executionTimesBSWN[0] + " First quartile time for BSWN : " + new_executionTimesBSWN[relevantIterations/4] + " Median time for BSWN : " + new_executionTimesBSWN[relevantIterations/2] + " Third quartile time for BSWN : " + new_executionTimesBSWN[3 * relevantIterations / 4] + " Maximum time for BSWN : " + new_executionTimesBSWN[relevantIterations - 1]);
+            System.out.println("Minimum time for QSGPT : " + new_executionTimesQSGPT[0] + " First quartile time for QSGPT : " + new_executionTimesQSGPT[relevantIterations/4] + " Median time for QSGPT : " + new_executionTimesQSGPT[relevantIterations/2] + " Third quartile time for QSGPT : " + new_executionTimesQSGPT[3 * relevantIterations / 4] + " Maximum time for QSGPT : " + new_executionTimesQSGPT[relevantIterations - 1]);
+            System.out.println("Minimum time for SSGPT : " + new_executionTimesSSGPT[0] + " First quartile time for SSGPT : " + new_executionTimesSSGPT[relevantIterations/4] + " Median time for SSGPT : " + new_executionTimesSSGPT[relevantIterations/2] + " Third quartile time for SSGPT : " + new_executionTimesSSGPT[3 * relevantIterations / 4] + " Maximum time for SSGPT : " + new_executionTimesSSGPT[relevantIterations - 1]);
+            System.out.println();
         }
     }
 }
