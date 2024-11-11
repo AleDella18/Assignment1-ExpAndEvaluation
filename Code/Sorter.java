@@ -17,12 +17,12 @@ public interface Sorter<T extends Comparable<T>> {
         }
     }
 
-    /*
-    Main function for running the experiment
-     */
+
+    // Main function for running the experiment
+
     static void main(String[] args) {
 
-        // Number of iterations, iterations % 4 == 1
+        // number of iterations and warmups
         int iterations = 80;
         int warmUps = 30;
         int relevantIterations = iterations - warmUps;
@@ -33,7 +33,7 @@ public interface Sorter<T extends Comparable<T>> {
         long[] executionTimesQSGPT = new long[iterations];
         long[] executionTimesSSGPT = new long[iterations];
 
-        // Sizes
+        // Sizes of the arrays
         int smallSize = 100;
         int mediumSize = 1000;
         int largeSize = 10000;
@@ -44,21 +44,21 @@ public interface Sorter<T extends Comparable<T>> {
         Random rand = new Random();
 
         for (int size : integerSizes) {
-            // Test sorted
+            // Test sorted (best case)
             Integer[] testSorted = new Integer[size];
             for (int i = 0; i < size; ++i) {
                 testSorted[i] = i;
             }
             integerTests.add(testSorted);
 
-            // Test reverse sorted
+            // Test reverse sorted (worst case)
             Integer[] testReverseSorted = new Integer[size];
             for (int i = 0; i < size; ++i) {
                 testReverseSorted[i] = size - 1 - i;
             }
             integerTests.add(testReverseSorted);
 
-            // Test random order
+            // Test random order (average case)
             Integer[] testRandomOrder = new Integer[size];
             for (int i = 0; i < size; ++i) {
                 testRandomOrder[i] = rand.nextInt(size);
@@ -79,7 +79,6 @@ public interface Sorter<T extends Comparable<T>> {
         List<String[]> stringTests = new ArrayList<>();
 
         // For small size arrays
-
         String[] smallSortedOrder = Arrays.copyOf(testStringsSmallArray, testStringsSmallArray.length);
         Arrays.sort(smallSortedOrder);
         stringTests.add(smallSortedOrder); // Test 0: Small size / Already sorted
@@ -92,7 +91,6 @@ public interface Sorter<T extends Comparable<T>> {
         stringTests.add(smallRandomOrder); // Test 2: Small size / Random ordered
 
         // For medium size arrays
-
         String[] mediumSortedOrder = Arrays.copyOf(testStringsMediumArray, testStringsMediumArray.length);
         Arrays.sort(mediumSortedOrder);
         stringTests.add(mediumSortedOrder); // Test 3: Medium size / Already sorted
@@ -105,7 +103,6 @@ public interface Sorter<T extends Comparable<T>> {
         stringTests.add(mediumRandomOrder); // Test 5: Medium size / Random ordered
 
         // For large size arrays
-
         String[] largeSortedOrder = Arrays.copyOf(testStringsLargeArray, testStringsLargeArray.length);
         Arrays.sort(largeSortedOrder);
         stringTests.add(largeSortedOrder); // Test 6: Large size / Already sorted
@@ -124,6 +121,7 @@ public interface Sorter<T extends Comparable<T>> {
         QuickSortGPT<Integer> QSGPTIntegers = new QuickSortGPT<>();
         SelectionSortGPT<Integer> SSGPTIntegers = new SelectionSortGPT<>();
 
+        // variables to time each iteration
         long startTime;
         long endTime;
         long totalTime;
@@ -166,7 +164,7 @@ public interface Sorter<T extends Comparable<T>> {
                 executionTimesSSGPT[i] = totalTime;
             }
 
-            // Exclude warm-up iterations
+            // Excluding warm-up iterations
             long[] new_executionTimesBSUNC = Arrays.copyOfRange(executionTimesBSUNC, warmUps, iterations);
             long[] new_executionTimesBSWN = Arrays.copyOfRange(executionTimesBSWN, warmUps, iterations);
             long[] new_executionTimesQSGPT = Arrays.copyOfRange(executionTimesQSGPT, warmUps, iterations);
@@ -254,7 +252,7 @@ public interface Sorter<T extends Comparable<T>> {
                 executionTimesSSGPT[i] = totalTime;
             }
 
-            // Exclude warm-up iterations
+            // Excluding warm-up iterations
             long[] new_executionTimesBSUNC = Arrays.copyOfRange(executionTimesBSUNC, warmUps, iterations);
             long[] new_executionTimesBSWN = Arrays.copyOfRange(executionTimesBSWN, warmUps, iterations);
             long[] new_executionTimesQSGPT = Arrays.copyOfRange(executionTimesQSGPT, warmUps, iterations);
